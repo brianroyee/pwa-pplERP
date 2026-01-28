@@ -43,9 +43,12 @@ export function MeetingList() {
     return (
         <div className="space-y-8">
             {upcoming.length > 0 && (
-                <div className="space-y-3">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-primary-400 px-1">Upcoming</h3>
-                    <div className="space-y-2">
+                <div className="space-y-4">
+                    <div className="flex items-center gap-3 px-1">
+                        <div className="w-1 h-3 bg-accent rounded-full" />
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">Upcoming</h3>
+                    </div>
+                    <div className="space-y-3">
                         {upcoming.map(meeting => (
                             <MeetingCard key={meeting.id} meeting={meeting} />
                         ))}
@@ -54,9 +57,12 @@ export function MeetingList() {
             )}
 
             {past.length > 0 && (
-                <div className="space-y-3">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-dark-500 px-1">Past Meetings</h3>
-                    <div className="space-y-2">
+                <div className="space-y-4">
+                    <div className="flex items-center gap-3 px-1">
+                        <div className="w-1 h-3 bg-white/10 rounded-full" />
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">Past Meetings</h3>
+                    </div>
+                    <div className="space-y-3">
                         {past.map(meeting => (
                             <MeetingCard key={meeting.id} meeting={meeting} />
                         ))}

@@ -33,56 +33,100 @@ export function PersonList() {
         search(e.target.value);
     };
 
+    const [isFilterExpanded, setIsFilterExpanded] = useState(false);
+
     return (
-        <div className="space-y-4">
-            {/* Search bar */}
-            <div className="relative">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="M21 21l-4.35-4.35" />
-                </svg>
-                <input
-                    type="text"
-                    placeholder="Search people..."
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className="input pl-10"
-                />
+        <div className="space-y-6 px-2">
+            {/* Hero Search */}
+            <div className="card !p-1 bg-onyx-900 border-white/5 focus-within:border-accent/40 focus-within:bg-white/[0.02] transition-all">
+                <div className="flex items-center">
+                    <div className="pl-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-text-muted">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search your network..."
+                        value={searchQuery}
+                        onChange={handleSearch}
+                        className="w-full bg-transparent border-none py-3 px-4 text-white focus:ring-0 placeholder-text-muted/40 text-sm font-medium"
+                    />
+                </div>
             </div>
 
-            {/* Filters */}
-            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            {/* Expandable Filters & Sort */}
+            <div className="space-y-4">
                 <button
-                    onClick={() => setFilterType('all')}
-                    className={`btn btn-sm whitespace-nowrap ${filterType === 'all' ? 'btn-primary' : 'btn-secondary'}`}
+                    onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                    className="card !p-0 w-full flex items-center justify-between bg-onyx-900 overflow-hidden group hover:border-accent/40 active:scale-[0.98]"
                 >
-                    All
+                    <div className="flex items-center gap-4 px-5 py-4">
+                        <div className="p-2 rounded-xl bg-white/5 group-hover:bg-accent/10 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`w-3.5 h-3.5 text-accent transition-transform duration-300 ${isFilterExpanded ? 'rotate-180' : ''}`}>
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </div>
+                        <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white">Filters</span>
+                    </div>
+                    <div className="flex items-center gap-2 px-5">
+                        {filterType !== 'all' && (
+                            <span className="text-[9px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-full uppercase tracking-widest border border-accent/20">
+                                {RELATIONSHIP_TYPE_LABELS[filterType as keyof typeof RELATIONSHIP_TYPE_LABELS]}
+                            </span>
+                        )}
+                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest group-hover:text-white transition-colors">
+                            Sort: <span className="text-accent">{sortBy}</span>
+                        </span>
+                    </div>
                 </button>
-                {Object.entries(RELATIONSHIP_TYPE_LABELS).map(([value, label]) => (
-                    <button
-                        key={value}
-                        onClick={() => setFilterType(value)}
-                        className={`btn btn-sm whitespace-nowrap ${filterType === value ? 'btn-primary' : 'btn-secondary'}`}
-                    >
-                        {label}
-                    </button>
-                ))}
-            </div>
 
-            {/* Sort dropdown */}
-            <div className="flex items-center justify-between">
-                <p className="text-sm text-dark-400">
-                    {filteredPersons.length} {filteredPersons.length === 1 ? 'person' : 'people'}
-                </p>
-                <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                    className="select text-sm py-1.5 px-3 w-auto"
-                >
-                    <option value="name">Sort by Name</option>
-                    <option value="recent">Sort by Recent</option>
-                    <option value="importance">Sort by Importance</option>
-                </select>
+                {isFilterExpanded && (
+                    <div className="card-glass p-6 space-y-8 animate-slide-up shadow-2xl">
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-2">
+                                <span className="w-1 h-1 rounded-full bg-accent" />
+                                Relationship Type
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                <button
+                                    onClick={() => setFilterType('all')}
+                                    className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${filterType === 'all' ? 'bg-accent text-onyx-950 shadow-[0_5px_15px_rgba(197,160,89,0.3)]' : 'bg-white/5 text-text-muted hover:bg-white/10 border border-white/5'}`}
+                                >
+                                    All
+                                </button>
+                                {Object.entries(RELATIONSHIP_TYPE_LABELS).map(([value, label]) => (
+                                    <button
+                                        key={value}
+                                        onClick={() => setFilterType(value)}
+                                        className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${filterType === value ? 'bg-accent text-onyx-950 shadow-[0_5px_15px_rgba(197,160,89,0.3)]' : 'bg-white/5 text-text-muted hover:bg-white/10 border border-white/5'}`}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] px-1 flex items-center gap-2">
+                                <span className="w-1 h-1 rounded-full bg-accent" />
+                                Sort Priority
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {(['name', 'recent', 'importance'] as const).map((option) => (
+                                    <button
+                                        key={option}
+                                        onClick={() => setSortBy(option)}
+                                        className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === option ? 'bg-white/20 text-white border-white/30' : 'bg-white/5 text-text-muted hover:bg-white/10 border border-white/5'}`}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Person list */}

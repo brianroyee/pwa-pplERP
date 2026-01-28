@@ -49,21 +49,25 @@ const navItems = [
 
 export function BottomNav() {
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-dark-900/95 backdrop-blur-lg border-t border-dark-700 safe-bottom z-40">
-            <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-4">
+        <nav className="fixed bottom-0 left-0 right-0 bg-onyx-950/80 backdrop-blur-2xl border-t border-white/5 safe-bottom z-40">
+            <div className="flex items-center justify-around h-20 max-w-lg mx-auto px-6">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.path}
                         to={item.path}
                         className={({ isActive }) =>
-                            `flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-200 min-w-[64px] ${isActive
-                                ? 'text-primary-400 bg-primary-400/10'
-                                : 'text-dark-400 hover:text-dark-200 hover:bg-dark-800'
+                            `flex flex-col items-center justify-center gap-1.5 transition-all duration-300 ${isActive
+                                ? 'text-accent scale-110'
+                                : 'text-text-muted hover:text-white'
                             }`
                         }
                     >
-                        {item.icon}
-                        <span className="text-xs font-medium">{item.label}</span>
+                        <div className={`p-2 rounded-xl transition-colors ${item.path === window.location.pathname ? 'bg-accent/10' : ''}`}>
+                            {item.icon}
+                        </div>
+                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-opacity ${item.path === window.location.pathname ? 'opacity-100' : 'opacity-0'}`}>
+                            {item.label}
+                        </span>
                     </NavLink>
                 ))}
             </div>

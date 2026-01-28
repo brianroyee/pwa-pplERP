@@ -68,6 +68,9 @@ export interface Person {
     organization?: string;
     hometown?: string;
     currentCity?: string;
+    strengths?: string;
+    skills?: string;
+    bestAt?: string;
     notes?: string;
     lastInteractionAt?: string; // ISO 8601
     createdAt: string; // ISO 8601

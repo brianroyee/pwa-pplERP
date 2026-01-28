@@ -40,6 +40,9 @@ export function PersonForm({ person, onSuccess }: PersonFormProps) {
         howMet: string;
         firstMetDate: string;
         notes: string;
+        strengths: string;
+        skills: string;
+        bestAt: string;
     }>({
         fullName: person?.fullName || '',
         preferredName: person?.preferredName || '',
@@ -51,7 +54,10 @@ export function PersonForm({ person, onSuccess }: PersonFormProps) {
         currentCity: person?.currentCity || '',
         howMet: person?.howMet || '',
         firstMetDate: person?.firstMetDate || '',
-        notes: person?.notes || ''
+        notes: person?.notes || '',
+        strengths: person?.strengths || '',
+        skills: person?.skills || '',
+        bestAt: person?.bestAt || ''
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -100,30 +106,48 @@ export function PersonForm({ person, onSuccess }: PersonFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Required Fields */}
-            <div className="space-y-4">
-                <Input
-                    label="Full Name"
-                    placeholder="John Doe"
-                    value={formData.fullName}
-                    onChange={(e) => handleChange('fullName', e.target.value)}
-                    error={errors.fullName}
-                    required
-                    autoFocus
-                />
+        <form onSubmit={handleSubmit} className="space-y-10">
+            {/* 1. Identity Section */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 px-1">
+                    <div className="w-1 h-4 bg-accent rounded-full" />
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">Identity</h3>
+                </div>
 
-                <Input
-                    label="Preferred Name"
-                    placeholder="Johnny (optional)"
-                    value={formData.preferredName}
-                    onChange={(e) => handleChange('preferredName', e.target.value)}
-                    hint="How they like to be called"
-                />
+                <div className="space-y-4">
+                    <div className="space-y-1">
+                        <label className="label">Full Name</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Alexander Hamilton"
+                            value={formData.fullName}
+                            onChange={(e) => handleChange('fullName', e.target.value)}
+                            className="w-full bg-transparent border-b border-white/10 py-3 text-2xl font-bold text-white focus:outline-none focus:border-accent transition-colors placeholder-white/5"
+                            required
+                            autoFocus
+                        />
+                        {errors.fullName && <p className="text-red-400 text-[10px] font-bold mt-1 uppercase tracking-widest">{errors.fullName}</p>}
+                    </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                    <Input
+                        label="Nick / Preferred Name"
+                        placeholder="Alex"
+                        value={formData.preferredName}
+                        onChange={(e) => handleChange('preferredName', e.target.value)}
+                    />
+                </div>
+            </section>
+
+            {/* 2. Relationship Section */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 px-1">
+                    <div className="w-1 h-4 bg-accent rounded-full" />
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">Relationship</h3>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
                     <Select
-                        label="Relationship"
+                        label="Type"
                         options={relationshipOptions}
                         value={formData.relationshipType}
                         onChange={(e) => handleChange('relationshipType', e.target.value)}
@@ -131,66 +155,97 @@ export function PersonForm({ person, onSuccess }: PersonFormProps) {
                     />
 
                     <Select
-                        label="Importance"
+                        label="Priority"
                         options={importanceOptions}
                         value={String(formData.importance)}
                         onChange={(e) => handleChange('importance', parseInt(e.target.value))}
                         required
                     />
                 </div>
+            </section>
 
-                <div className="grid grid-cols-2 gap-4">
+            {/* 3. Professional Section */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 px-1">
+                    <div className="w-1 h-4 bg-accent rounded-full" />
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">Professional</h3>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
                     <Input
                         label="Profession"
-                        placeholder="Software Engineer"
+                        placeholder="Founder / CEO"
                         value={formData.profession}
                         onChange={(e) => handleChange('profession', e.target.value)}
                     />
 
                     <Input
                         label="Organization"
-                        placeholder="Acme Inc."
+                        placeholder="Cenit Labs"
                         value={formData.organization}
                         onChange={(e) => handleChange('organization', e.target.value)}
                     />
                 </div>
+            </section>
+
+            {/* 4. Intelligence Section */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 px-1">
+                    <div className="w-1 h-4 bg-accent rounded-full" />
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">Intelligence</h3>
+                </div>
+
+                <div className="space-y-6">
+                    <Input
+                        label="Strengths"
+                        placeholder="Analytical thinking, empathy..."
+                        value={formData.strengths}
+                        onChange={(e) => handleChange('strengths', e.target.value)}
+                    />
+
+                    <Input
+                        label="Skills"
+                        placeholder="Node.js, UI Design, Negotiation..."
+                        value={formData.skills}
+                        onChange={(e) => handleChange('skills', e.target.value)}
+                    />
+
+                    <Input
+                        label="Best At"
+                        placeholder="What is their 'superpower'?"
+                        value={formData.bestAt}
+                        onChange={(e) => handleChange('bestAt', e.target.value)}
+                        hint="The one thing they do better than anyone else."
+                    />
+                </div>
+            </section>
+
+            {/* 5. Background Section Toggle */}
+            <div className="pt-6 pb-2 text-center">
+                <button
+                    type="button"
+                    onClick={() => setShowOptional(!showOptional)}
+                    className="btn-glass px-10 border-white/10 hover:border-accent/50 group"
+                >
+                    <span className="group-hover:text-white transition-colors">
+                        {showOptional ? '− Hide Personal Context' : '+ Add Personal Context'}
+                    </span>
+                </button>
             </div>
 
-            {/* Optional Fields Toggle */}
-            <button
-                type="button"
-                onClick={() => setShowOptional(!showOptional)}
-                className="flex items-center gap-2 text-sm text-primary-400 hover:text-primary-300 transition-colors"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className={`w-4 h-4 transition-transform ${showOptional ? 'rotate-180' : ''}`}
-                >
-                    <polyline points="6,9 12,15 18,9" />
-                </svg>
-                {showOptional ? 'Hide' : 'Show'} additional details
-            </button>
-
-            {/* Optional Fields */}
             {showOptional && (
-                <div className="space-y-4 animate-slide-up">
-                    <div className="divider" />
-
-                    <div className="grid grid-cols-2 gap-4">
+                <section className="space-y-6 animate-slide-up">
+                    <div className="grid grid-cols-2 gap-6">
                         <Input
                             label="Hometown"
-                            placeholder="New York"
+                            placeholder="London"
                             value={formData.hometown}
                             onChange={(e) => handleChange('hometown', e.target.value)}
                         />
 
                         <Input
                             label="Current City"
-                            placeholder="San Francisco"
+                            placeholder="Dubai"
                             value={formData.currentCity}
                             onChange={(e) => handleChange('currentCity', e.target.value)}
                         />
@@ -198,44 +253,36 @@ export function PersonForm({ person, onSuccess }: PersonFormProps) {
 
                     <Input
                         label="How You Met"
-                        placeholder="Met at a conference"
+                        placeholder="At the 2025 Summit"
                         value={formData.howMet}
                         onChange={(e) => handleChange('howMet', e.target.value)}
                     />
 
-                    <Input
-                        type="date"
-                        label="First Met Date"
-                        value={formData.firstMetDate}
-                        onChange={(e) => handleChange('firstMetDate', e.target.value)}
-                    />
-
                     <Textarea
-                        label="Notes"
-                        placeholder="Any additional notes about this person..."
+                        label="Personal Context"
+                        placeholder="Interests, family, mutual friends..."
                         value={formData.notes}
                         onChange={(e) => handleChange('notes', e.target.value)}
                         rows={4}
                     />
-                </div>
+                </section>
             )}
 
-            {/* Submit buttons */}
-            <div className="flex gap-3 pt-4">
+            {/* Actions */}
+            <div className="flex flex-col gap-4 pt-10">
+                <button
+                    type="submit"
+                    className="btn btn-primary py-5 rounded-2xl shadow-[0_15px_30px_rgba(197,160,89,0.2)]"
+                    disabled={isLoading}
+                >
+                    {isLoading ? 'Processing...' : person ? 'Update Context' : 'Establish Connection'}
+                </button>
                 <button
                     type="button"
                     onClick={() => navigate(-1)}
-                    className="btn btn-secondary flex-1"
-                    disabled={isLoading}
+                    className="btn-glass self-center border-none opacity-40 hover:opacity-100 hover:text-accent transition-all mt-2"
                 >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="btn btn-primary flex-1"
-                    disabled={isLoading}
-                >
-                    {isLoading ? 'Saving...' : person ? 'Update Person' : 'Add Person'}
+                    Cancel & Return
                 </button>
             </div>
         </form>

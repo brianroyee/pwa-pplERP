@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">pplERP</string>
+    <string name="title_activity_main">pplERP</string>
+    <string name="package_name">com.pplerp.app</string>
+    <string name="custom_url_scheme">com.pplerp.app</string>
+</resources>
